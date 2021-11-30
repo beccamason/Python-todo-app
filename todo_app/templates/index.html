@@ -1,18 +1,44 @@
-{% extends "layout.html" %}
-{% block title %}To-Do App{% endblock %}
+{% extends "layout.html" %} {% block title %}To-Do App{% endblock %} {% block
+content %}
+<div class="jumbotron">
+  <h1 class="display-4">To-Do</h1>
+  <p class="lead">Just another to-do app</p>
+  <hr class="my-4">
+  <p>Keep yourself organised and accountable with this handy to-do app!</p>
+</div>
 
-{% block content %}
-  <div class="jumbotron">
-    <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Items</h2>
+    <ul class="list-group mb-4">
+      {% for item in items %}
+      <li class="list-group-item list-group-item-warning lead">
+        {{ item.title }} - {{item.status}}
+        <div class="itemOptions">
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/update/{{ item.id }}">DONE</a>
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/remove/{{ item.id }}">REMOVE</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <h3>Add Item</h3>
+    <form
+      class="form-control-lg form-inline"
+      action="/add"
+      ,
+      method="post"
+      ,
+      class="form"
+    >
+      <div class="form-group form-inline">
+          <input type="text" id="title" name="title" required placeholder="What's next on the list?"/><br />
+          <input
+            type="submit"
+            value="Add Task"
+            class="btn btn-outline-warning"
+          />
+      </div>
+    </form>
   </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-        <!-- List the todo items here -->
-      </ul>
-    </div>
-  </div>
+</div>
 {% endblock %}

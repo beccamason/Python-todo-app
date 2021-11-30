@@ -5,6 +5,7 @@ _DEFAULT_ITEMS = [
     { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 
+_STATUS_ID = {'Not Started': 0, 'Done': 1}
 
 def get_items():
     """
@@ -13,8 +14,9 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-    return session.get('items', _DEFAULT_ITEMS.copy())
-
+    items = session.get('items', _DEFAULT_ITEMS.copy())
+    sortedItems = sorted(items, key=lambda x: _STATUS_ID[x['status']])
+    return sortedItems
 
 def get_item(id):
     """
@@ -50,8 +52,9 @@ def add_item(title):
     # Add the item to the list
     items.append(item)
     session['items'] = items
-
-    return item
+    newItems = get_items()
+    sortedItems = sorted(newItems, key=lambda x: _STATUS_ID[x['status']])
+    return sortedItems
 
 
 def save_item(item):
@@ -67,3 +70,16 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+def remove_item(id):
+    """
+    Removes a specified item from the list entirely. 
+    
+    Args:
+        id: the id of the item to delete
+    """
+    items = get_items()
+    items = [item for item in items if item['id'] != id]
+    session['items'] = items
+
+    return 
