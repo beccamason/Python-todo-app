@@ -15,7 +15,8 @@ content %}
       <li class="list-group-item list-group-item-warning lead">
         {{ item.title }} - {{item.status}}
         <div class="itemOptions">
-          <a class="btn btn-outline-secondary btn-sm" role="button" href="/update/{{ item.id }}">DONE</a>
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/progress/{{ item.id }}">IN PROGRESS</a>
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/compelte/{{ item.id }}">DONE</a>
           <a class="btn btn-outline-secondary btn-sm" role="button" href="/remove/{{ item.id }}">REMOVE</a>
         </div>
       </li>
@@ -32,6 +33,7 @@ content %}
     >
       <div class="form-group form-inline">
           <input type="text" id="title" name="title" required placeholder="What's next on the list?"/><br />
+          <input type="text" id="description" name="description" required placeholder="Give me the deets..."/><br />
           <input
             type="submit"
             value="Add Task"
