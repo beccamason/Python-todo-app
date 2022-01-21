@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import todo_app.data.trello_items as trello_items
 
 from todo_app.flask_config import Config
+from todo_app.ViewModel import ViewModel
 
 app = Flask(__name__)
 app.config.from_object(Config())
@@ -9,7 +10,8 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
     items = trello_items.get_items()
-    return render_template('index.html', items=items)
+    item_view_model = ViewModel(items)
+    return render_template('index.html', view_model=item_view_model)
 
 @app.route('/add', methods=['POST'])
 def add():

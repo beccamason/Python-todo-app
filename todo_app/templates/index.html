@@ -11,7 +11,7 @@ content %}
   <div class="col-md-12">
     <h2>Items</h2>
     <ul class="list-group mb-4">
-      {% for item in items %}
+      {% for item in view_model.items %}
       <li class="list-group-item list-group-item-warning lead">
         {{ item.title }} - {{item.status}}
         <div class="itemOptions">
