@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-import todo_app.data.session_items as session_items
+import todo_app.data.trello_items as trello_items
 
 from todo_app.flask_config import Config
 
@@ -8,24 +8,27 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    items = session_items.get_items()
+    items = trello_items.get_items()
     return render_template('index.html', items=items)
 
 @app.route('/add', methods=['POST'])
 def add():
-    session_items.add_item(request.form.get('title'))
+    trello_items.add_item(request.form.get('title'), request.form.get('description'))
     return redirect('/')
 
-@app.route('/update/<int:id>')
-def markDone(id):
-    item = session_items.get_item(id)
-    item['status'] = 'Done'
-    session_items.save_item(item)
+@app.route('/complete/<id>')
+def markDone(id: str):
+    trello_items.complete_item(id)
     return redirect('/')
 
-@app.route('/remove/<int:id>')
+@app.route('/progress/<id>')
+def markStarted(id: str):
+    trello_items.progress_item(id)
+    return redirect('/')
+
+@app.route('/remove/<id>')
 def removeItem(id):
-    session_items.remove_item(id)
+    trello_items.remove_item(id)
     return redirect('/')
 
 if __name__ == "__main__":
