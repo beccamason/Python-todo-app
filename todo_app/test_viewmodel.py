@@ -6,7 +6,7 @@ from todo_app.data import trello_items
 @pytest.fixture
 def board_prep(): 
     #Store current state of the board
-    items = trello_items.get_items
+    items = trello_items.get_items()
     for item in items: 
         trello_items.remove_item(item.id)
     
@@ -16,14 +16,11 @@ def board_prep():
     trello_items.add_item("Not Started Test", "NotStartedTest")
 
     #Update status of done and doing items 
-    for view_item in ViewModel.not_started_items: 
-        if view_item.title == "Done Test":
-            trello_items.complete_item(view_item.id)
-
-        elif view_item.title == "Doing Test":
-            trello_items.progress_item(view_item.id)
-        
-    added_items = trello_items.get_items
+    added_items = trello_items.get_items()
+    trello_items.complete_item(added_items[0].id)
+    trello_items.progress_item(added_items[1].id)
+    added_items = trello_items.get_items()
+    yield ViewModel(added_items)   
     
     #Remove added items 
     for added_item in added_items:
@@ -31,15 +28,22 @@ def board_prep():
 
     #Restore board 
     for item in items: 
-        trello_items.add_item(item.id)
+        trello_items.add_item(item.title, item.notes)
 
-def test_not_started():
-    not_started = ViewModel.not_started_items
-    for not_started_item in not_started: 
-        assert not_started_item.status == "Not Started"
+def test_not_started(board_prep):
+    assert len(board_prep.not_started_items) == 1
+    assert board_prep.not_started_items[0].title == "Not Started Test"
+    assert board_prep.not_started_items[0].status == "Not Started"
+    
+def test_done(board_prep):
+    assert len(board_prep.done_items) == 1
+    assert board_prep.done_items[0].title == "Done Test"
+    assert board_prep.done_items[0].status == "Done"  
 
 def test_doing(board_prep):
-    assert(len(ViewModel.doing_items) == 1)
+    assert len(board_prep.doing_items) == 1
+    assert board_prep.doing_items[0].title == "Doing Test"
+    assert board_prep.doing_items[0].status == "In Progress"
+    
 
-def test_done():
-    assert(len(ViewModel.done_items) == 1)
+
