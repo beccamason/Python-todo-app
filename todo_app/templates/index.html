@@ -9,14 +9,37 @@ content %}
 
 <div class="row">
   <div class="col-md-12">
-    <h2>Items</h2>
+    <h2>Not Started</h2>
     <ul class="list-group mb-4">
-      {% for item in view_model.items %}
+      {% for item in view_model.not_started_items %}
       <li class="list-group-item list-group-item-warning lead">
-        {{ item.title }} - {{item.status}}
+        {{ item.title }}
         <div class="itemOptions">
           <a class="btn btn-outline-secondary btn-sm" role="button" href="/progress/{{ item.id }}">IN PROGRESS</a>
           <a class="btn btn-outline-secondary btn-sm" role="button" href="/complete/{{ item.id }}">DONE</a>
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/remove/{{ item.id }}">REMOVE</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <h2>In Progress</h2>
+    <ul class="list-group mb-4">
+      {% for item in view_model.doing_items %}
+      <li class="list-group-item list-group-item-warning lead">
+        {{ item.title }}
+        <div class="itemOptions">
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/complete/{{ item.id }}">DONE</a>
+          <a class="btn btn-outline-secondary btn-sm" role="button" href="/remove/{{ item.id }}">REMOVE</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <h2>Completed</h2>
+    <ul class="list-group mb-4">
+      {% for item in view_model.done_items %}
+      <li class="list-group-item list-group-item-warning lead">
+        {{ item.title }}
+        <div class="itemOptions">
           <a class="btn btn-outline-secondary btn-sm" role="button" href="/remove/{{ item.id }}">REMOVE</a>
         </div>
       </li>
