@@ -30,6 +30,9 @@ def board_prep():
     for item in items: 
         trello_items.add_item(item.title, item.notes)
 
+def test_pytest(): 
+    assert(True)
+
 def test_not_started(board_prep):
     assert len(board_prep.not_started_items) == 1
     assert board_prep.not_started_items[0].title == "Not Started Test"
