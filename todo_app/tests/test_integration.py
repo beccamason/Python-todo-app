@@ -1,6 +1,7 @@
-import pytest
+import pytest, requests, os
 from dotenv import load_dotenv, find_dotenv
 from todo_app import app
+
 
 @pytest.fixture
 def client(): 
@@ -12,3 +13,24 @@ def client():
     with test_app.test_client() as client: 
         yield client
 
+def test_index_page(monkeypatch, client):
+    monkeypatch.setattr(requests, 'get', get_lists_stub)
+    response = client.get('/')
+
+class StubResponse():
+    def __init__(self, fake_response_data):
+        self.fake_response_data = fake_response_data
+    
+    def json(self):
+        return self.fake_response_data
+
+def get_lists_stub(url, params):
+    test_board_id = os.environ.get('TRELLO_ID')
+    fake_response_data = None
+    if url == f'https://api.trello.com/1/boards/{test_board_id}/lists':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'Not Started',
+            'cards': [{'id': '456', 'title': 'Test card'}]
+        }]
+    return StubResponse(fake_response_data)
