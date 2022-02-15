@@ -58,9 +58,17 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 
 ## Testing 
 
-This app uses Pytest for unit testing. The current unit tests are as follows: 
+This app uses `Pytest`. The current unit tests are as follows: 
 - Testing Pytest is working 
 - Checking that 'Not Started' cards show in the view model 
 - Same for 'Done' items 
 - Same for 'In Progress' items 
 
+There is also an integration test in place using mocking to simulate getting cards from the Trello API.
+
+To action these tests run the following in the terminal: 
+```bash 
+$ poetry run pytest 
+```
+
+These tests can also be accessed from the testing pane within VS Code. 

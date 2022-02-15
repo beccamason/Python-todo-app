@@ -11,16 +11,16 @@ def board_prep():
     cards = [not_started_card, in_progress_card, done_card]
     return ViewModel(cards)
 
-@pytest.fixture
-def done_cards_prep():
-    done_card_1 = Card("3", "Done Test", "Done", "test")
-    done_card_2 = Card("4", "Done Test", "Done", "test")
-    done_card_3 = Card("5", "Done Test", "Done", "test")
-    done_card_4 = Card("6", "Done Test", "Done", "test")
-    done_card_5 = Card("7", "Done Test", "Done", "test")
-    done_card_6 = Card("8", "Done Test", "Done", "test")
-    done_cards = [done_card_1, done_card_2, done_card_3, done_card_4, done_card_5, done_card_6]
-    return ViewModel(done_cards)
+# @pytest.fixture
+# def done_cards_prep():
+#     done_card_1 = Card("3", "Done Test", "Done", "test")
+#     done_card_2 = Card("4", "Done Test", "Done", "test")
+#     done_card_3 = Card("5", "Done Test", "Done", "test")
+#     done_card_4 = Card("6", "Done Test", "Done", "test")
+#     done_card_5 = Card("7", "Done Test", "Done", "test")
+#     done_card_6 = Card("8", "Done Test", "Done", "test")
+#     done_cards = [done_card_1, done_card_2, done_card_3, done_card_4, done_card_5, done_card_6]
+#     return ViewModel(done_cards)
 
 def test_pytest(): 
     assert(True)
