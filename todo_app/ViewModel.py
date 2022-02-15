@@ -19,3 +19,8 @@ class ViewModel:
     @property 
     def done_items(self):
         return [item for item in self._items if item.status == "Done"]
+
+    @property
+    def done_items_filtered(self):
+        if len(self.done_items() < 6):
+            return self.done_items()

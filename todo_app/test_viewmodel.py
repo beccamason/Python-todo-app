@@ -5,30 +5,8 @@ from todo_app.data import trello_items
 
 @pytest.fixture
 def board_prep(): 
-    #Store current state of the board
-    items = trello_items.get_items()
-    for item in items: 
-        trello_items.remove_item(item.id)
-    
-    #Create new items 
-    trello_items.add_item("Done Test", "DoneTest")
-    trello_items.add_item("Doing Test", "DoingTest")
-    trello_items.add_item("Not Started Test", "NotStartedTest")
-
-    #Update status of done and doing items 
-    added_items = trello_items.get_items()
-    trello_items.complete_item(added_items[0].id)
-    trello_items.progress_item(added_items[1].id)
-    added_items = trello_items.get_items()
-    yield ViewModel(added_items)   
-    
-    #Remove added items 
-    for added_item in added_items:
-        trello_items.remove_item(added_item.id)
-
-    #Restore board 
-    for item in items: 
-        trello_items.add_item(item.title, item.notes)
+    cards = [Card("1", "Not Started Test", "Not Started", "test"), Card("2", "In Progress Test", "In Progress", "test"), Card("3", "Done Test", "Done", "test")]
+    return ViewModel(cards)
 
 def test_pytest(): 
     assert(True)
@@ -45,8 +23,5 @@ def test_done(board_prep):
 
 def test_doing(board_prep):
     assert len(board_prep.doing_items) == 1
-    assert board_prep.doing_items[0].title == "Doing Test"
+    assert board_prep.doing_items[0].title == "In Progress Test"
     assert board_prep.doing_items[0].status == "In Progress"
-    
-
-
