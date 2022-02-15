@@ -7,15 +7,15 @@ from todo_app import app
 def client(): 
     file_path = find_dotenv('.env.test')
     load_dotenv(file_path, override=True)
-
     test_app = app.create_app()
-
     with test_app.test_client() as client: 
         yield client
 
 def test_index_page(monkeypatch, client):
-    monkeypatch.setattr(requests, 'get', get_lists_stub)
+    monkeypatch.setattr(requests, 'request', get_lists_stub)
     response = client.get('/')
+    assert response.status_code == 200
+    assert 'Test card' in response.data.decode()
 
 class StubResponse():
     def __init__(self, fake_response_data):
@@ -24,13 +24,13 @@ class StubResponse():
     def json(self):
         return self.fake_response_data
 
-def get_lists_stub(url, params):
+def get_lists_stub(method, url, headers):
     test_board_id = os.environ.get('TRELLO_ID')
     fake_response_data = None
-    if url == f'https://api.trello.com/1/boards/{test_board_id}/lists':
+    if url == f'https://api.trello.com/1/boards/{test_board_id}/lists?key=key&token=token&cards=open':
         fake_response_data = [{
             'id': '123abc',
             'name': 'Not Started',
-            'cards': [{'id': '456', 'title': 'Test card'}]
+            'cards': [{'id': '456', 'name': 'Test card', 'status': 'Not Started', 'desc': 'testing again'}]
         }]
     return StubResponse(fake_response_data)
