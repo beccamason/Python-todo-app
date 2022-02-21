@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.github",
+    "\\todo_app",
+    "\\todo_app\\data",
+    "\\todo_app\\templates",
+    "\\todo_app\\tests"
+  ],
+  "SelectedNode": "\\todo_app\\app.py",
+  "PreviewInSolutionExplorer": false
+}
