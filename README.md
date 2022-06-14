@@ -72,3 +72,27 @@ $ poetry run pytest
 ```
 
 These tests can also be accessed from the testing pane within VS Code. 
+
+##Docker 
+
+This app uses 'Docker' to enable it to run through a container. 
+
+To build only the development container run the following command: 
+```bash 
+docker build --target development --tag todo-app:dev .
+```
+
+To run the development container use: 
+```bash 
+docker run --env-file ./.env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/todo_app/todo_app todo-app:dev
+```
+
+To build the production container run the following command: 
+```bash 
+docker build --target production --tag todo-app:prod .
+```
+ 
+To run the production container use: 
+```bash
+docker run --env-file ./.env -p 80:80 todo-app:prod .
+```
