@@ -1,0 +1,79 @@
+- name: Run todo app on VM
+  hosts: webservers
+  remote_user: ec2-user
+  vars_prompt: 
+  - name: api_key
+    prompt: Enter the Trello API Key...
+    private: no
+  
+  - name: trello_token
+    prompt: Enter the Trello Token... 
+    private: no 
+
+  - name: trello_id 
+    prompt: Enter the Trello Board Id... 
+    private: no
+
+  tasks: 
+  - name: Install Git 
+    ansible.builtin.yum:
+      name: git
+      state: latest
+    become: yes
+  
+  - name: Install Python 3
+    ansible.builtin.yum:
+      name: python3
+      state: latest
+    become: yes
+  
+  - name: Install Poetry
+    ansible.builtin.shell:
+      cmd: curl -sSl https://install.python-poetry.org | python3 -
+  #create method could be added here
+
+  - name: Create directory for the To-Do App code
+    ansible.builtin.file:
+      dest: /opt/todo
+      state: directory
+      owner: ec2-user
+    become: yes
+
+  - name: Get latest version of your code with Git
+    ansible.builtin.git:
+      repo: https://github.com/beccamason/Python-todo-app.git
+      dest: /opt/todo
+      update: yes
+    
+  - name: Install project dependencies 
+    ansible.builtin.shell: 
+      cmd: ~/.local/bin/poetry install
+      chdir: /opt/todo
+  
+  - name: Create a .env file on the host
+    ansible.builtin.template:
+      src: /home/ec2-user/.ansible/.env.j2
+      dest: /opt/todo/.env
+      owner: ec2-user
+
+  - name: Add Todo service file 
+    ansible.builtin.template:
+      src: /home/ec2-user/.ansible/todoapp.service
+      dest: /opt/todo/todoapp.service
+      owner: ec2-user
+    become: yes
+
+  - name: Install Policy-Kit1 
+    ansible.builtin.yum:
+      name: polkit
+      state: latest
+    become: yes
+  
+  - name: Start the app
+    ansible.builtin.systemd:
+      name: todo
+      enabled: yes
+      state: started
+      daemon_reload: yes
+    become: yes
+
